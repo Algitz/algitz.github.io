@@ -10,7 +10,9 @@ let links = {
   sciTue: 'https://chula.zoom.us/j/94192343050?pwd=WEFCMmdPUkVsb3pNOS9EQzhkZjY5UT09',
   sciWed: 'https://chula.zoom.us/j/96369962032?pwd=MGJyVWtSVzZzZDROM0I5dXk0Z2dWQT09',
   sciThu: 'https://chula.zoom.us/j/94108470684?pwd=aGQ1NWZRV0I3T3Y4RkZjRjdSVjRKdz09',
-  eng: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5384/index',
+  engMon: 'https://chula.zoom.us/j/98026971354?pwd=cGxMdThXNHhJbE1PM3JJZ3RoRVFYZz09',
+  engTue: 'https://chula.zoom.us/j/96851945088?pwd=cFNXdmZUcHNnNW1kMWQvRW1TdWZBQT09',
+  engFri: 'https://chula.zoom.us/j/97530180394?pwd=MVYwZHJBbStOOVJZanp0OHBCdFRmUT09',
   mat: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5283/index',
   his: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5321/index',
   soc: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5314/index',
@@ -91,12 +93,12 @@ function update(){
     fri7.innerHTML = '';
     fri8.innerHTML = 'Science';
   }
-  mon2.onclick = function(){window.location.href = links.eng;};
+  mon2.onclick = function(){window.location.href = links.engMon;};
   mon6.onclick = function(){window.location.href = links.mat;};
   mon7.onclick = function(){window.location.href = links.his;};
   tue1.onclick = function(){window.location.href = links.soc;};
   tue2.onclick = function(){window.location.href = links.mat;};
-  tue5.onclick = function(){window.location.href = links.eng;};
+  tue5.onclick = function(){window.location.href = links.engTue;};
   tue6.onclick = function(){window.location.href = links.hea;};
   tue7.onclick = function(){window.location.href = links.sciTue;};
   wed2.onclick = function(){window.location.href = links.sciWed;};
@@ -107,7 +109,7 @@ function update(){
   thu3.onclick = function(){window.location.href = links.soc;};
   thu5.onclick = function(){window.location.href = links.gui;};
   thu6.onclick = function(){window.location.href = links.sciThu;};
-  fri3.onclick = function(){window.location.href = links.eng;};
+  fri3.onclick = function(){window.location.href = links.engFri;};
   fri6.onclick = function(){window.location.href = links.mat;};
   fri7.onclick = function(){window.location.href = links.sco;};
   for(let i of schedule.children[0].children){
