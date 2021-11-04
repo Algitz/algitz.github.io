@@ -20,7 +20,8 @@ let links = {
   tha: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5292/index',
   tec: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5307/index',
   gui: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5328/index',
-  sco: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5335/index'
+  sco: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5335/index',
+  hmr: 'https://chula.zoom.us/j/99878743857?pwd=Z0pKait2cmYrUVhGcFdnbVFqcDNlQT09'
 };
 // update
 function update(){
@@ -39,7 +40,6 @@ function update(){
     tue5.innerHTML = 'English';
     tue6.innerHTML = '';
     tue7.innerHTML = 'Science';
-    tue8.innerHTML = '';
     wed1.innerHTML = 'Art';
     wed2.innerHTML = 'Science';
     wed3.innerHTML = '';
@@ -57,7 +57,7 @@ function update(){
     fri5.innerHTML = '';
     fri6.innerHTML = 'Math';
     fri7.innerHTML = 'Scouts';
-    fri8.innerHTML = 'Science';
+    fri8.innerHTML = '';
   }
   else{
     mon1.innerHTML = 'Music';
@@ -73,7 +73,6 @@ function update(){
     tue5.innerHTML = 'English';
     tue6.innerHTML = 'Health Education';
     tue7.innerHTML = 'Science';
-    tue8.innerHTML = '';
     wed1.innerHTML = '';
     wed2.innerHTML = 'Science';
     wed3.innerHTML = '';
@@ -91,7 +90,7 @@ function update(){
     fri5.innerHTML = '';
     fri6.innerHTML = 'Math';
     fri7.innerHTML = '';
-    fri8.innerHTML = 'Science';
+    fri8.innerHTML = '';
   }
   mon2.onclick = function(){window.location.href = links.engMon;};
   mon6.onclick = function(){window.location.href = links.mat;};
@@ -123,6 +122,7 @@ function update(){
 }
 update();
 // eventlisteners
+// #83c7e6 dark #b5e1f5 light
 h1.onclick = function(){
   scheduleType = (scheduleType=='A')?'B':'A';
   update();
