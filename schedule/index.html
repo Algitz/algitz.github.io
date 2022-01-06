@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1 id="h1"></h1>
-  <h2 id="h2">Zoom Links</h2>
+  <h2 id="h2"></h2>
   <table id="schedule" border="1" class="schedule">
     <tr>
       <td></td>
@@ -54,8 +54,7 @@
     </tr>
     <tr>
       <td>Thursday</td>
-      <td><button id="thu0"></button></td>
-      <td><button id="thu1"></button></td>
+      <td colspan="2"><button id="thu0"></button></td>
       <td><button id="thu2"></button></td>
       <td><button id="thu3"></button></td>
       <td><button id="thu5"></button></td>
@@ -73,6 +72,76 @@
       <td><button id="fri8"></button></td>
     </tr>
   </table>
+  <table id="cpschedule" border="1" class="cpschedule">
+    <tr>
+      <td></td>
+      <td>Period 0<br>8:00-8:30</td>
+      <td>Period 1<br>8:30-9:10</td>
+      <td>Period 2<br>9:20-10:00</td>
+      <td>Period 3<br>10:20-11:00</td>
+      <td rowspan="6">Lunch Break</td>
+      <td>Period 5<br>12:00-12:40</td>
+      <td>Period 6<br>12:50-1:30</td>
+      <td>Period 7<br>1:50-2:30</td>
+      <td>Period 8<br>2:40-3:20</td>
+    </tr>
+    <tr>
+      <td>Monday</td>
+      <td></td>
+      <td><button id="cpmon1"></button></td>
+      <td><button id="cpmon2"></button></td>
+      <td><button id="cpmon3"></button></td>
+      <td colspan="2"><button id="cpmon5"></button></td>
+      <td><button id="cpmon7"></button></td>
+      <td><button id="cpmon8"></button></td>
+    </tr>
+    <tr>
+      <td>Tuesday</td>
+      <td></td>
+      <td><button id="cptue1"></button></td>
+      <td><button id="cptue2"></button></td>
+      <td><button id="cptue3"></button></td>
+      <td><button id="cptue5"></button></td>
+      <td><button id="cptue6"></button></td>
+      <td colspan="2"><button id="cptue7"></button></td>
+    </tr>
+    <tr>
+      <td>Wenzday</td>
+      <td></td>
+      <td><button id="cpwed1"></button></td>
+      <td><button id="cpwed2"></button></td>
+      <td><button id="cpwed3"></button></td>
+      <td><button id="cpwed5"></button></td>
+      <td><button id="cpwed6"></button></td>
+      <td colspan="2"><button id="cpwed7"></button></td>
+    </tr>
+    <tr>
+      <td>Thursday</td>
+      <td><button id="cpthu0"></button></td>
+      <td><button id="cpthu1"></button></td>
+      <td><button id="cpthu2"></button></td>
+      <td><button id="cpthu3"></button></td>
+      <td><button id="cpthu5"></button></td>
+      <td><button id="cpthu6"></button></td>
+      <td colspan="2"><button id="cpthu7">Elective</button></td>
+    </tr>
+    <tr>
+      <td>Friday</td>
+      <td></td>
+      <td colspan="2"><button id="cpfri1">Elective</button></td>
+      <td><button id="cpfri3"></button></td>
+      <td><button id="cpfri5"></button></td>
+      <td><button id="cpfri6"></button></td>
+      <td><button id="cpfri7"></button></td>
+      <td><button id="cpfri8"></button></td>
+    </tr>
+  </table>
+  <br>
+  <div id="selbox" class="selbox">
+    Select Group For <span id="selboxsubjecttext"></span><br>
+    <button id="selboxg1"></button>
+    <button id="selboxg2"></button>
+  </div>
   <link href="index.css" rel="stylesheet">
   <script src="index.js"></script>
 </body>
