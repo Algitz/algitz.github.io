@@ -7,7 +7,7 @@ const lightPink = '#ffbdf2';
 const darkPink = '#c981bb';
 const d = new Date();
 // determine week
-let date = d.getDate()+100*(d.getMonth()-1);
+let date = d.getDate()+100*d.getMonth();
 if(date>=8 && date<=14 || date>=22 && date<=28 || date>=105 && date<=111 || date>=119 && date<=125){
   scheduleType = 'B';
 }
@@ -16,7 +16,6 @@ const links = {
   sciTue: 'https://chula.zoom.us/j/94192343050?pwd=WEFCMmdPUkVsb3pNOS9EQzhkZjY5UT09',
   sciWed: 'https://chula.zoom.us/j/96369962032?pwd=MGJyVWtSVzZzZDROM0I5dXk0Z2dWQT09',
   sciThu: 'https://chula.zoom.us/j/94108470684?pwd=aGQ1NWZRV0I3T3Y4RkZjRjdSVjRKdz09',
-  sciFri: '',
   engCor: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5384/index',
   engSki: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5463/index',
   artA: 'https://cudplus.onsmart.school/lms/courseonlinemeetings/5393/index',
@@ -79,7 +78,6 @@ function update(){
       tue7.innerHTML = 'Science';
       wed1.innerHTML = 'Art';
       wed2.innerHTML = 'Science';
-      wed3.innerHTML = 'English';
       wed6.innerHTML = 'Thai';
       wed7.innerHTML = 'Technology';
       thu0.innerHTML = 'Homeroom + Math';
@@ -106,7 +104,6 @@ function update(){
       tue7.innerHTML = 'Science';
       wed1.innerHTML = 'Art';
       wed2.innerHTML = 'Science';
-      wed3.innerHTML = 'English';
       wed6.innerHTML = 'Thai';
       wed7.innerHTML = 'Technology';
       thu0.innerHTML = 'Homeroom + Math';
@@ -133,7 +130,6 @@ function update(){
     tue7.onclick = function(){window.location.href = links.sciTue;};
     wed1.onclick = function(){select = (select == 'Art') ? '' : 'Art'; update();};
     wed2.onclick = function(){window.location.href = links.sciWed;};
-    wed3.onclick = function(){window.location.href = links.engCor;};
     wed6.onclick = function(){window.location.href = links.tha;};
     wed7.onclick = function(){window.location.href = links.tec;};
     thu0.onclick = function(){window.location.href = links.hmr;};
@@ -145,7 +141,7 @@ function update(){
     fri5.onclick = function(){window.location.href = links.tha;};
     fri6.onclick = function(){window.location.href = links.mat;};
     fri7.onclick = function(){window.location.href = links.sco;};
-    fri8.onclick = function(){window.location.href = links.sciFri;};
+    fri8.onclick = function(){window.location.href = links.sciTue;};
     for(let i of schedule.children[0].children){
       for(let j of i.children){
         for(let k of j.children){
@@ -160,6 +156,8 @@ function update(){
     else if(select == 'Art'){wed1.style.backgroundColor = darkBlue;}
     thu7.style.color = '#b0b0b0';
     fri1.style.color = '#b0b0b0';
+    thu7.style.backgroundColor = '#ffffff';
+    fri1.style.backgroundColor = '#ffffff';
     if(select == ''){selbox.style.visibility = 'hidden';}
     else{selbox.style.visibility = 'visible';}
     selboxg1.style.backgroundColor = lightBlue;
@@ -337,9 +335,11 @@ function update(){
 update();
 // eventlisteners
 h1.onclick = function(){
-  scheduleType = (scheduleType=='A')?'B':'A';
-  select = '';
-  update();
+  if(linkType == 'Zoom'){
+    scheduleType = (scheduleType=='A')?'B':'A';
+    select = '';
+    update();
+  }
 };
 h2.onclick = function(){
   linkType = (linkType=='Zoom')?'Cudplus':"Zoom";

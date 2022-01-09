@@ -2,6 +2,13 @@ body{
   font-family: Nunito;
   text-align: center;
 }
+h1, h2{
+  width: 20%;
+  margin: auto;
+}
+button{
+  border-radius: 3%;
+}
 .schedule, .cpschedule{
   margin: auto;
   border-collapse: collapse;
