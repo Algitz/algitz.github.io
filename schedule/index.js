@@ -66,6 +66,7 @@ function update(){
     h1.innerHTML = 'Schedule '+scheduleType;
     h2.innerHTML = 'Zoom Links';
     if(scheduleType=='A'){
+      mon1.innerHTML = '';
       mon2.innerHTML = 'English';
       mon3.innerHTML = '';
       mon6.innerHTML = 'Math';
@@ -92,6 +93,7 @@ function update(){
       fri8.innerHTML = 'Science';
     }
     else{
+      mon1.innerHTML = 'Music';
       mon2.innerHTML = 'English';
       mon3.innerHTML = 'PE';
       mon6.innerHTML = '';
@@ -102,7 +104,7 @@ function update(){
       tue5.innerHTML = 'English';
       tue6.innerHTML = 'Health Education';
       tue7.innerHTML = 'Science';
-      wed1.innerHTML = 'Art';
+      wed1.innerHTML = '';
       wed2.innerHTML = 'Science';
       wed6.innerHTML = 'Thai';
       wed7.innerHTML = 'Technology';
@@ -266,7 +268,7 @@ function update(){
     else if(select == 'Math2'){cptue2.style.backgroundColor = darkPink;}
     else if(select == 'Math3'){cpthu1.style.backgroundColor = darkPink;}
     else if(select == 'Math4'){cpfri6.style.backgroundColor = darkPink;}
-    else if(select == 'Science1'){cpthu7.style.backgroundColor = darkPink;}
+    else if(select == 'Science1'){cptue7.style.backgroundColor = darkPink;}
     else if(select == 'Science2'){cpwed2.style.backgroundColor = darkPink;}
     else if(select == 'Science3'){cpthu6.style.backgroundColor = darkPink;}
     else if(select == 'Science4'){cpfri8.style.backgroundColor = darkPink;}
