@@ -1,0 +1,51 @@
+.main{
+  margin: auto;
+  text-align: center;
+}
+.main td{
+  width: 60px;
+  height: 60px;
+  font-family: Nunito;
+}
+.main td:not(.no):not(.lanthacta){
+  vertical-align: top;
+}
+.no{
+  vertical-align: bottom;
+  font-size: 18px
+}
+.lanthacta{
+  vertical-align: middle;
+  font-size: 18px
+}
+.main button{
+  width: 100%;
+  height: 100%;
+  font-family: Nunito;
+  font-size: 22px;
+  color: black;
+}
+.topbar div{
+  display: table;
+  font-family: Nunito;
+}
+.txt1{
+  margin: auto;
+  font-size: 36px;
+}
+.txt3{
+  font-size: 26px;
+  margin: 25px auto;
+}
+.txt4, .txt5{
+  margin: auto;
+}
+.skip, .restart, .practice{
+  padding: 8px 16px;
+  font-family: Nunito;
+  font-size: 16px;
+  margin: auto 15px;
+}
+.topbar{
+  height: 50px;
+}
