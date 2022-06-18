@@ -13,6 +13,7 @@ window.onkeydown = function(e){
   if(cod == 32){txt.innerHTML += ' ';}
   else if(cod == 8){txt.innerHTML = txt.innerHTML.substring(0, txt.innerHTML.length-1);}
   else if(cod == 13){txt.innerHTML += '\n';}
+  else if(cod == 67 && e.ctrlKey && !e.shiftKey && !e.altKey){navigator.clipboard.writeText(txt.value);}
   else if(g.includes(cod)){
     let key;
     for(let i in g){
