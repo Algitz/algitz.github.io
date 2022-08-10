@@ -1,5 +1,5 @@
 let player = {
-  x: 400, y: 550,
+  x: 400, y: 400,
   size: 60,
   dx: 0, dy: 0
 };
@@ -21,12 +21,19 @@ let jumpParam = {
   jumpTime: 30,
   jumpDistance: 0, // variable
 };
+let wallBounce = {
+  bounceSpeed: 18
+}
+let worldParam = {
+  groundHeight: 40
+}
 
 function setup() {
   createCanvas(800, 600);
   defaultCanvas0.style.margin = 'auto';
   defaultCanvas0.style.display = 'block';
   //frameRate(10);
+  player.y = 600 - worldParam.groundHeight - player.size / 2
 }
 
 function draw() {
@@ -68,15 +75,24 @@ function draw() {
       player.y -= jumpParam.jumpDistance;
       jumpParam.jumpDistance = 0;
     }
-    console.log(player.y);
   }
 
   player.x += player.dx;
   player.y += player.dy;
+  
+  if(player.x - player.size / 2 < 0){
+    player.dx = wallBounce.bounceSpeed;
+    player.x += player.dx
+  }
 
   jumpParam.jumpDistance += player.dy;
-
+  
+  fill(230, 199, 149);
+  noStroke();
   rect(player.x-player.size/2, player.y-player.size/2, player.size);
+  
+  fill(84, 71, 50);
+  rect(0, 600 - worldParam.groundHeight, 800, worldParam.groundHeight);
 }
 
 window.onkeydown = function(e){
