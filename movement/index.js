@@ -5,7 +5,9 @@ let player = {
 };
 let action = {
   accelLeft: false, accelRight: false,
-  jump: false
+  decelLeft: false, decelRight: false,
+  jump: false,
+  wallBounce: false
 };
 let keys = {
   A: false,
@@ -22,7 +24,7 @@ let jumpParam = {
   jumpDistance: 0, // variable
 };
 let wallBounce = {
-  bounceSpeed: 18
+  bounceMultiplier: 1.2
 }
 let worldParam = {
   groundHeight: 40
@@ -43,10 +45,12 @@ function draw() {
     if(player.dx < 0){
       player.dx += lrParam.movingSpeed/lrParam.accelTime;
       action.accelLeft = false;
+      if(!action.wallBounce){player.dx = 0;}
     }
     else if(player.dx > 0){
       player.dx -= lrParam.movingSpeed/lrParam.accelTime;
       action.accelRight = false;
+      if(!action.wallBounce){player.dx = 0;}
     }
   }
   else if(keys.D){
@@ -76,19 +80,18 @@ function draw() {
       jumpParam.jumpDistance = 0;
     }
   }
+  
+  if(player.x - player.size / 2 <= 0 || player.x + player.size / 2 >= 800){
+    if(!action.wallBounce){
+      player.dx *= -wallBounce.bounceMultiplier;
+      player.x += player.dx
+      action.wallBounce = true;
+    }
+  }
+  else if(action.wallBounce){action.wallBounce = false;}
 
   player.x += player.dx;
   player.y += player.dy;
-  
-  if(player.x - player.size / 2 < 0){
-    player.dx = wallBounce.bounceSpeed;
-    player.x += player.dx
-  }
-  else if(player.x + player.size / 2 > 800){
-    player.dx = -wallBounce.bounceSpeed;
-    player.x += player.dx
-  }
-  
   jumpParam.jumpDistance += player.dy;
   
   fill(230, 199, 149);
