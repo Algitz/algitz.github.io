@@ -84,7 +84,11 @@ function draw() {
     player.dx = wallBounce.bounceSpeed;
     player.x += player.dx
   }
-
+  else if(player.x + player.size / 2 > 800){
+    player.dx = -wallBounce.bounceSpeed;
+    player.x += player.dx
+  }
+  
   jumpParam.jumpDistance += player.dy;
   
   fill(230, 199, 149);
