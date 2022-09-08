@@ -84,6 +84,9 @@ class player:
 class images:
     player = pygame.image.load('power_head.png')
     bullet = pygame.image.load('bullet.png')
+    powerup = pygame.image.load('power_up.png')
+    heart = pygame.image.load('heart.png')
+    background = pygame.image.load('bg.png')
 
 
 ground_level = 800  # the top of the ground
@@ -95,18 +98,19 @@ keyD = False
 keySpace = False
 
 platforms = [[600, 600, 150, 30]]  # x, y, width, height
-bullets = [[300, 0, 19, 66, 0, 4], [400, 0, 19, 66, 45, 4]]  # x, y, width, height, rot, speed
+bullets = [[300, 0, 19, 66, 0, 4], [400, 0, 19, 66, 0, 4]]  # x, y, width, height, rot, speed
+powerups = [[400, 400, 50, 50, 'slowness']]  # x, y, width, height, type (regen, doubleJump, slowEnemies, slowness, blind, bulletRedirect)
 
 # setup
 player.x = displayw / 2 - player.w / 2
 player.y = ground_level - player.h
+# pygame.display.set_icon()
 
 while not crashed:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
 
-        ############################
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 keyA = True
@@ -122,7 +126,7 @@ while not crashed:
                 keyD = False
             elif event.key == pygame.K_SPACE:
                 keySpace = False
-        ######################
+
     if keyA == keyD:
         player.dx = 0
     elif keyA:
@@ -169,7 +173,7 @@ while not crashed:
         if side_collide(i, 2):
             player.y = i[1] + i[3]
             player.dy *= -1
-        elif side_collide(i, 0):
+        elif side_collide(i, 0) and player.dy > 0:
             is_jumping = False
             player.y = i[1] - player.h
             player.dy = 0
@@ -180,21 +184,38 @@ while not crashed:
             player.x = i[0] - player.w
 
     for i in bullets:
-        if side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3):
+        if i[1] + i[3] * sin(90 - i[4]) > ground_level or i[1] + i[3] * sin(90 - i[4]) - i[2] * sin(
+                i[4]) > ground_level:
+            bullets.remove(i)
+        elif side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3):
             bullets.remove(i)
             player.hearts -= 1
         elif side_collide(i, 0):
             bullets.remove(i)
             player.dy *= -1
 
+    for i in powerups:
+        if side_collide(i, 0) or side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3):
+            if i[4] == 'regen':
+                player.hearts += 1
+            #elif i[4] == 'slowness':
+
+            powerups.remove(i)
+
     gameDisplay.fill(white)
     # gameDisplay.blit(pygame.font.SysFont('Comic Sans MS', 30).render(a, True, (0, 0, 0)), (0, 0))
+    gameDisplay.blit(pygame.transform.scale(images.background, (displayw, displayh)), (0, 0))
     for i in bullets:
         gameDisplay.blit(pygame.transform.rotate(images.bullet, i[4]), (i[0], i[1]))
     for i in platforms:
-        pygame.draw.rect(gameDisplay, (197, 226, 232), pygame.Rect(i[0], i[1], i[2], i[3]))
+        pygame.draw.rect(gameDisplay, (63, 150, 62), pygame.Rect(i[0], i[1], i[2], i[3]))
+    for i in powerups:
+        gameDisplay.blit(images.powerup, (i[0], i[1]))
     gameDisplay.blit(images.player, (player.x, player.y))
     pygame.draw.rect(gameDisplay, (77, 58, 45), pygame.Rect(0, ground_level, displayw, displayh - ground_level))
+    # ui
+    for i in range(player.hearts):
+        gameDisplay.blit(images.heart, (50 * i, 0))
 
     pygame.display.update()
     clock.tick(60)
