@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 
@@ -15,7 +16,6 @@ clock = pygame.time.Clock()
 crashed = False
 
 pi = 3.14159265359
-sqrt3 = 3 ** (1/2)
 
 
 class player:
@@ -31,6 +31,9 @@ class player:
     hearts = 3
     isJumping = False
     isDoubleJumping = False
+    immunityDuration = 140
+    immunityTimer = 0
+    immunityFlashPeriod = 25
 
     class jump:
         h = 250
@@ -45,6 +48,8 @@ class images:
     powerup = pygame.image.load('power_up.png')
     heart = pygame.image.load('heart.png')
     background = pygame.image.load('bg.png')
+    player_translucent = pygame.image.load('power_head_translucent.png')
+    platform = pygame.image.load('platform.png')
     # favicon = pygame.image.load('icon.png')
 
 
@@ -60,23 +65,22 @@ class powerup:
     blindnessDuration = 600
     blindnessRadius = 220
     blindnessColor = (10, 10, 10)
+    bulletRedirectDuration = 140
+    bulletRedirectSpeed = 1.5
 
 
-ground_level = 800  # the top of the ground
+ground_level = 780  # the top of the ground
 
 keyA = False
 keyD = False
 keySpace = False
 
-platforms = [[500, 250, 450, 30]]  # x, y, width, height
-bullets = [[300, 0, 19, 66, 0, 4], [400, 500, 19, 66, 180, 4]]  # x, y, width, height, rot, speed
-powerups = [[800, 400, 50, 50,
-             'bulletRedirect']]  # x, y, width, height, type (regen, doubleJump, slowEnemies, slowness, blindness,
-# bulletRedirect)
+screen = 'game' # mainMenu, game
 
-
-def eqwerr(n1, n2, nerror):  # equal with error
-    return n2 - nerror < n1 < n2 + nerror
+platforms = [[1000, 350, 123, 13]]  # x, y, width, height
+bullets = [[300, 0, 19, 66, 0, 4, 0], [500, 30, 19, 66, 0, 4, 0], [700, 60, 19, 66, 0, 4, 0], [900, 90, 19, 66, 0, 4, 0]]  # x, y, width, height, rot, speed, dθ
+powerups = [[800, 500, 50, 50, 'doubleJump']]
+# x, y, width, height, type (regen, doubleJump, slowEnemies, slowness, blindness, bulletRedirect)
 
 
 def check_collision_side(vertex, pltvt):  # platform vertices
@@ -136,199 +140,239 @@ def gafrar(rise, run): # get angle from rise and run
 player.x = displayw / 2 - player.w / 2
 player.y = ground_level - player.h
 # pygame.display.set_icon()
+bullets = []
+for i in range(10):
+    bullets.append([random.randrange(0, displayw), random.randrange(0, 50), 19, 66, 0, 4, 0.0])
 
 while not crashed:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            crashed = True
+    if screen == 'mainMenu':
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                keyA = True
-            elif event.key == pygame.K_d:
-                keyD = True
-            elif event.key == pygame.K_SPACE:
-                keySpace = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                ""
+                # mousePos = pygame.mouse.get_pos()
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                keyA = False
-            elif event.key == pygame.K_d:
-                keyD = False
-            elif event.key == pygame.K_SPACE:
-                keySpace = False
 
-    if powerup.duration > 0 and powerup.durationTimer < powerup.duration:
-        powerup.durationTimer += 1
-    elif powerup.durationTimer >= powerup.duration:
-        powerup.duration = 0
-        powerup.durationTimer = 0
-        powerup.type = ''
+        gameDisplay.fill(white)
+    elif screen == 'game':
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True
 
-    if keyA == keyD:
-        if player.isJumping:
-            player.dx *= 0.98
-        elif not -0.1 < player.dx < 0.1:
-            player.dx *= 0.69
-        else:
-            player.dx = 0
-    elif keyA:
-        if powerup.durationTimer > 0 and powerup.type == 'slowness':
-            player.dx = -player.speed * powerup.slownessMultiplier
-        else:
-            player.dx = -player.speed
-    elif keyD:
-        if powerup.durationTimer > 0 and powerup.type == 'slowness':
-            player.dx = player.speed * powerup.slownessMultiplier
-        else:
-            player.dx = player.speed
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    keyA = True
+                elif event.key == pygame.K_d:
+                    keyD = True
+                elif event.key == pygame.K_SPACE:
+                    keySpace = True
 
-    if keySpace and not player.isJumping and player.jump.cooldownTimer == 0:
-        player.isJumping = True
-        player.jump.cooldownTimer = 1
-        player.d2y = 8 * player.jump.h / player.jump.time ** 2
-        player.dy = - 4 * player.jump.h / player.jump.time
-    elif keySpace and player.isJumping and player.dy > 0 and not player.isDoubleJumping and powerup.durationTimer > 0 and powerup.type == 'doubleJump':
-        player.isDoubleJumping = True
-        player.d2y = 8 * player.jump.h / player.jump.time ** 2
-        player.dy = - 4 * player.jump.h / player.jump.time
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_a:
+                    keyA = False
+                elif event.key == pygame.K_d:
+                    keyD = False
+                elif event.key == pygame.K_SPACE:
+                    keySpace = False
 
-    if player.jump.cooldownTimer > 0:
-        player.jump.cooldownTimer += 1
-    if not player.isJumping and player.jump.cooldownTimer > player.jump.cooldown:
-        player.jump.cooldownTimer = 0
+        if powerup.duration > 0 and powerup.durationTimer < powerup.duration:
+            powerup.durationTimer += 1
+        elif powerup.durationTimer >= powerup.duration:
+            powerup.duration = 0
+            powerup.durationTimer = 0
+            powerup.type = ''
 
-    for i in platforms:
-        if (player.x < i[0] - player.w or player.x > i[0] + i[2]) and player.y == i[1] - player.h and not player.isJumping:
+        if 0 < player.immunityTimer < player.immunityDuration:
+            player.immunityTimer += 1
+        elif player.immunityTimer >= player.immunityDuration:
+            player.immunityTimer = 0
+
+        if keyA == keyD:
+            if player.isJumping:
+                player.dx *= 0.98
+            elif not -0.1 < player.dx < 0.1:
+                player.dx *= 0.69
+            else:
+                player.dx = 0
+        elif keyA:
+            if powerup.durationTimer > 0 and powerup.type == 'slowness':
+                player.dx = -player.speed * powerup.slownessMultiplier
+            else:
+                player.dx = -player.speed
+        elif keyD:
+            if powerup.durationTimer > 0 and powerup.type == 'slowness':
+                player.dx = player.speed * powerup.slownessMultiplier
+            else:
+                player.dx = player.speed
+
+        if keySpace and not player.isJumping and player.jump.cooldownTimer == 0:
             player.isJumping = True
+            player.jump.cooldownTimer = 1
             player.d2y = 8 * player.jump.h / player.jump.time ** 2
+            player.dy = - 4 * player.jump.h / player.jump.time
+        elif keySpace and player.isJumping and player.dy > 0 and not player.isDoubleJumping and powerup.durationTimer > 0 and powerup.type == 'doubleJump':
+            player.isDoubleJumping = True
+            player.d2y = 8 * player.jump.h / player.jump.time ** 2
+            player.dy = - 4 * player.jump.h / player.jump.time
 
-    player.dx += player.d2x
-    player.x += player.dx
-    player.dy += player.d2y
-    player.y += player.dy
+        if player.jump.cooldownTimer > 0:
+            player.jump.cooldownTimer += 1
+        if not player.isJumping and player.jump.cooldownTimer > player.jump.cooldown:
+            player.jump.cooldownTimer = 0
 
-    for i in bullets:
-        # i[4] += 1
-        if powerup.durationTimer > 0 and powerup.type == 'slowEnemies':
-            i[0] += i[5] * sin(i[4]) * powerup.slowEnemiesMultiplier
-            i[1] += i[5] * sin(90 - i[4]) * powerup.slowEnemiesMultiplier
-        else:
-            i[0] += i[5] * sin(i[4])
-            i[1] += i[5] * sin(90 - i[4])
+        for i in platforms:
+            if (player.x < i[0] - player.w or player.x > i[0] + i[2]) and player.y == i[1] - player.h and not player.isJumping:
+                player.isJumping = True
+                player.d2y = 8 * player.jump.h / player.jump.time ** 2
 
-    # collisions
-    if player.x < 0:
-        player.x = 0
-    if player.x > displayw - player.w:
-        player.x = displayw - player.w
-    if player.y > ground_level - player.h and player.isJumping:
-        player.y = ground_level - player.h
-        player.isJumping = False
-        player.isDoubleJumping = False
-        player.d2y = 0
-        player.dy = 0
+        player.dx += player.d2x
+        player.x += player.dx
+        player.dy += player.d2y
+        player.y += player.dy
 
-    for i in platforms:
-        if side_collide(i, 2):
-            player.y = i[1] + i[3]
-            player.dy *= -1
-        elif side_collide(i, 0) and player.dy > 0:
+        for i in bullets:
+            # i[4] += 1
+            i[4] = ((i[4] + 180) % 360) - 180
+            if powerup.durationTimer > 0 and powerup.type == 'bulletRedirect':
+                temp5 = gafrar(player.y + player.w / 2 - i[1], player.x + player.h / 2 - i[0])
+                if (player.y < i[1] and not -90 < temp5 < 90) or (player.x < i[0] and -180 < temp5 < 180):
+                    if temp5 < 0:
+                        temp5 += 180
+                    else:
+                        temp5 -= 180
+                if -10 < temp5 - i[4] < 10:
+                    i[6] = 0
+                elif (temp5 - i[4]) % 360 < (i[4] - temp5) % 360:
+                    i[6] = powerup.bulletRedirectSpeed
+                else:
+                    i[6] = - powerup.bulletRedirectSpeed
+            else:
+                i[6] = 0
+
+
+            i[4] += i[6]
+
+
+            if powerup.durationTimer > 0 and powerup.type == 'slowEnemies':
+                i[0] += i[5] * sin(i[4]) * powerup.slowEnemiesMultiplier
+                i[1] += i[5] * sin(90 - i[4]) * powerup.slowEnemiesMultiplier
+            else:
+                i[0] += i[5] * sin(i[4])
+                i[1] += i[5] * sin(90 - i[4])
+
+
+        # collisions
+        if player.x < 0:
+            player.x = 0
+        if player.x > displayw - player.w:
+            player.x = displayw - player.w
+        if player.y > ground_level - player.h and player.isJumping:
+            player.y = ground_level - player.h
             player.isJumping = False
             player.isDoubleJumping = False
-            player.y = i[1] - player.h
-            player.dy = 0
             player.d2y = 0
-        elif side_collide(i, 1):
-            player.x = i[0] + i[2]
-        elif side_collide(i, 3):
-            player.x = i[0] - player.w
+            player.dy = 0
 
-        for j in bullets:
-            temp3 = [[j[0], j[1]], [j[0] + j[2] * sin(90 - j[4]), j[1] - j[2] * sin(j[4])], [j[0] + j[3] * sin(j[4]), j[1] + j[3] * sin(90 - j[4])], [j[0] + j[3] * sin(j[4]) + j[2] * sin(90 - j[4]), j[1] + j[3] * sin(90 - j[4]) - j[2] * sin(j[4])]]
-            temp4 = False
-            for k in temp3:
-                if i[0] < k[0] < i[0] + i[2] and i[1] < k[1] < i[1] + i[3]:
-                    temp4 = True
-            if temp4:
-                bullets.remove(j)
+        for i in platforms:
+            if side_collide(i, 2):
+                player.y = i[1] + i[3]
+                player.dy *= -1
+            elif side_collide(i, 0) and player.dy > 0:
+                player.isJumping = False
+                player.isDoubleJumping = False
+                player.y = i[1] - player.h
+                player.dy = 0
+                player.d2y = 0
+            elif side_collide(i, 1):
+                player.x = i[0] + i[2]
+            elif side_collide(i, 3):
+                player.x = i[0] - player.w
 
-    for i in bullets:
-        if -90 < i[4] < 90 and (
-                i[1] + i[3] * sin(90 - i[4]) > ground_level or i[1] + i[3] * sin(90 - i[4]) - i[2] * sin(
-                i[4]) > ground_level):
-            bullets.remove(i)
-        elif (i[4] == 90 and i[0] > displayw) or (i[4] == -90 and i[0] < -i[3]):
-            bullets.remove(i)
-        elif not -90 < i[4] < 90 and (
-                i[1] - i[3] * sin(90 - i[4]) < 0 or i[1] - i[3] * sin(90 - i[4]) - i[2] * sin(i[4]) < 0):
-            bullets.remove(i)
-        elif side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3):
-            bullets.remove(i)
-            player.hearts -= 1
-        elif side_collide(i, 0):
-            bullets.remove(i)
-            player.dy *= -1
+            for j in bullets:
+                temp3 = [[j[0], j[1]], [j[0] + j[2] * sin(90 - j[4]), j[1] - j[2] * sin(j[4])], [j[0] + j[3] * sin(j[4]), j[1] + j[3] * sin(90 - j[4])], [j[0] + j[3] * sin(j[4]) + j[2] * sin(90 - j[4]), j[1] + j[3] * sin(90 - j[4]) - j[2] * sin(j[4])]]
+                temp4 = False
+                for k in temp3:
+                    if i[0] < k[0] < i[0] + i[2] and i[1] < k[1] < i[1] + i[3]:
+                        temp4 = True
+                if temp4:
+                    bullets.remove(j)
 
-    for i in powerups:
-        if side_collide(i, 0) or side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3):
-            if i[4] == 'regen':
-                player.hearts += 1
-            elif i[4] == 'doubleJump':
-                powerup.duration = powerup.doubleJumpDuration
-                powerup.type = 'doubleJump'
-            elif i[4] == 'slowEnemies':
-                powerup.duration = powerup.slowEnemiesDuration
-                powerup.type = 'slowEnemies'
-            elif i[4] == 'slowness':
-                powerup.duration = powerup.slownessDuration
-                powerup.type = 'slowness'
-            elif i[4] == 'blindness':
-                powerup.duration = powerup.blindnessDuration
-                powerup.type = 'blindness'
-            elif i[4] == 'bulletRedirect':
-                for j in bullets:
-                    temp5 = [j[0], j[1], (j[0] * 2 + j[3] * sin(j[4]) + j[2] * sin(90 - j[4])) / 2, (j[1] * 2 + j[3] * sin(90 - j[4]) - j[2] * sin(j[4])) / 2]  # bullet x, y, midpoint x, midpoint y
-                    temp5.append(gafrar(player.y - temp5[1], player.x - temp5[0])) # new angle
-                    if (player.y < temp5[1] and not -90 < temp5[4] < 90) or (player.x < temp5[1] and -180 < temp5[4] < 180):
-                        if temp5[4] < 0:
-                            temp5[4] += 180
-                        else:
-                            temp5[4] -= 180
+        for i in bullets:
+            if -90 < i[4] < 90 and (
+                    i[1] + i[3] * sin(90 - i[4]) > ground_level or i[1] + i[3] * sin(90 - i[4]) - i[2] * sin(
+                    i[4]) > ground_level):
+                bullets.remove(i)
+            elif (i[4] == 90 and i[0] > displayw) or (i[4] == -90 and i[0] < -i[3]):
+                bullets.remove(i)
+            elif not -90 < i[4] < 90 and (
+                    i[1] - i[3] * sin(90 - i[4]) < 0 or i[1] - i[3] * sin(90 - i[4]) - i[2] * sin(i[4]) < 0):
+                bullets.remove(i)
+            elif ((side_collide(i, 0) and player.dy < 0) or side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3)) and player.immunityTimer == 0:
+                bullets.remove(i)
+                player.hearts -= 1
+                player.immunityTimer = 1
+            elif side_collide(i, 0) and player.dy >= 0:
+                bullets.remove(i)
+                player.dy *= -1
 
-                    j[0] = (temp5[2] - temp5[0]) * sin(90 - temp5[4]) - (temp5[3] - temp5[1]) * sin(temp5[4]) + temp5[0]
-                    j[1] = (temp5[2] - temp5[0]) * sin(temp5[4]) + (temp5[3] - temp5[1]) * sin(temp5[4]) + temp5[1]
-                    j[4] = temp5[4]
+        for i in powerups:
+            if side_collide(i, 0) or side_collide(i, 1) or side_collide(i, 2) or side_collide(i, 3):
+                if i[4] == 'regen':
+                    player.hearts += 1
+                elif i[4] == 'doubleJump':
+                    powerup.duration = powerup.doubleJumpDuration
+                    powerup.type = 'doubleJump'
+                elif i[4] == 'slowEnemies':
+                    powerup.duration = powerup.slowEnemiesDuration
+                    powerup.type = 'slowEnemies'
+                elif i[4] == 'slowness':
+                    powerup.duration = powerup.slownessDuration
+                    powerup.type = 'slowness'
+                elif i[4] == 'blindness':
+                    powerup.duration = powerup.blindnessDuration
+                    powerup.type = 'blindness'
+                elif i[4] == 'bulletRedirect':
+                    powerup.duration = powerup.bulletRedirectDuration
+                    powerup.type = 'bulletRedirect'
 
-            powerups.remove(i)
+                powerups.remove(i)
 
-    gameDisplay.fill(white)
-    gameDisplay.blit(pygame.transform.scale(images.background, (displayw, displayh)), (0, 0))
-    # gameDisplay.blit(pygame.font.SysFont('Comic Sans MS', 30).render(str(powerup.durationTimer), True, (0, 0, 0)), (0, 50))
-    for i in bullets:
-        newrect = pygame.transform.rotate(images.bullet, i[4]).get_rect(center=((i[0] * 2 + i[3] * sin(i[4]) + i[2] * sin(90 - i[4])) / 2, (i[1] * 2 + i[3] * sin(90 - i[4]) - i[2] * sin(i[4])) / 2))
-        gameDisplay.blit(pygame.transform.rotate(images.bullet, i[4]), newrect)
-    for i in platforms:
-        pygame.draw.rect(gameDisplay, (63, 150, 62), pygame.Rect(i[0], i[1], i[2], i[3]))
-    for i in powerups:
-        gameDisplay.blit(images.powerup, (i[0], i[1]))
-    gameDisplay.blit(images.player, (player.x, player.y))
-    pygame.draw.rect(gameDisplay, (77, 58, 45), pygame.Rect(0, ground_level, displayw, displayh - ground_level))
-    if powerup.durationTimer > 0 and powerup.type == 'blindness':
-        temp1 = [(player.x + player.w / 2, 0), (displayw, 0), (displayw, displayh), (0, displayh), (0, 0),
-                 (player.x + player.w / 2, 0)]
-        temp2 = 18
-        for i in range(temp2):
-            temp1.append((player.x + player.w / 2 - powerup.blindnessRadius * sin(i * 360 / temp2),
-                          player.y + player.h / 2 - powerup.blindnessRadius * sin(90 - i * 360 / temp2)))
-        temp1.append(temp1[6])
-        pygame.draw.polygon(gameDisplay, powerup.blindnessColor, temp1)
-        pygame.draw.circle(gameDisplay, powerup.blindnessColor, (player.x + player.w / 2, player.y + player.h / 2),
-                           powerup.blindnessRadius + 5, 10)
+        gameDisplay.fill(white)
+        gameDisplay.blit(pygame.transform.scale(images.background, (displayw, displayh)), (0, 0))
+        # gameDisplay.blit(pygame.font.SysFont('Comic Sans MS', 30).render(str(powerup.durationTimer), True, (0, 0, 0)), (0, 50))
+        for i in bullets:
+            newrect = pygame.transform.rotate(images.bullet, i[4]).get_rect(center=((i[0] * 2 + i[3] * sin(i[4]) + i[2] * sin(90 - i[4])) / 2, (i[1] * 2 + i[3] * sin(90 - i[4]) - i[2] * sin(i[4])) / 2))
+            gameDisplay.blit(pygame.transform.rotate(images.bullet, i[4]), newrect)
+        for i in platforms:
+            gameDisplay.blit(images.platform, (i[0], i[1]))
+        for i in powerups:
+            gameDisplay.blit(images.powerup, (i[0], i[1]))
 
-    # ui
-    for i in range(player.hearts):
-        gameDisplay.blit(images.heart, (50 * i, 0))
+        if player.immunityTimer > 0 and 0 <= player.immunityTimer % player.immunityFlashPeriod <= player.immunityFlashPeriod / 2:
+            gameDisplay.blit(images.player_translucent, (player.x, player.y))
+        else:
+            gameDisplay.blit(images.player, (player.x, player.y))
+
+        pygame.draw.rect(gameDisplay, (77, 58, 45), pygame.Rect(0, ground_level, displayw, displayh - ground_level))
+
+        if powerup.durationTimer > 0 and powerup.type == 'blindness':
+            temp1 = [(player.x + player.w / 2, 0), (displayw, 0), (displayw, displayh), (0, displayh), (0, 0),
+                     (player.x + player.w / 2, 0)]
+            temp2 = 18
+            for i in range(temp2):
+                temp1.append((player.x + player.w / 2 - powerup.blindnessRadius * sin(i * 360 / temp2),
+                              player.y + player.h / 2 - powerup.blindnessRadius * sin(90 - i * 360 / temp2)))
+
+            temp1.append(temp1[6])
+            pygame.draw.polygon(gameDisplay, powerup.blindnessColor, temp1)
+            pygame.draw.circle(gameDisplay, powerup.blindnessColor, (player.x + player.w / 2, player.y + player.h / 2),
+                               powerup.blindnessRadius + 5, 10)
+
+        # ui
+        for i in range(player.hearts):
+            gameDisplay.blit(images.heart, (50 * i, 0))
 
     pygame.display.update()
     clock.tick(60)
