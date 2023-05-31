@@ -1,0 +1,34 @@
+body{
+  font-family: Nunito;
+  text-align: center;
+}
+h1, h2{
+  width: 20%;
+  margin: auto;
+}
+button{
+  border-radius: 3%;
+}
+.schedule{
+  margin: auto;
+  border-collapse: collapse;
+  text-align: center;
+}
+.schedule td{
+  width: 120px;
+  height: 60px;
+  padding: 5px;
+}
+.schedule button{
+  width: 100%;
+  height: 100%;
+  font-family: Nunito;
+  border: none;
+}
+.selbox button{
+  width: 120px;
+  height: 40px;
+  margin: 5px;
+  border: 1px;
+  font-family: Nunito;
+}
