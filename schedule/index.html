@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+  <title>Schedule</title>
+</head>
+<body>
+  <h1 id="h1">Schedule</h1><br>
+  <table id="schedule" border="1" class="schedule">
+    <tr>
+      <td></td>
+      <td>Period 1<br>8:30-9:20</td>
+      <td>Period 2<br>9:20-10:10</td>
+      <td>Period 3<br>10:20-11:10</td>
+      <td>Period 4<br>11:10-12:00</td>
+      <td rowspan="6">Lunch Break</td>
+      <td>Period 6<br>12:50-1:40</td>
+      <td>Period 7<br>1:50-2:40</td>
+      <td>Period 8<br>2:40-3:30</td>
+    </tr>
+    <tr>
+      <td>Monday</td>
+      <td><button id="cpmon1">English (Core)</button></td>
+      <td><button id="cpmon2">Electronics / Sketching</button></td>
+      <td colspan="2"><button id="cpmon3">Biology</button></td>
+      <td colspan="2"><button id="cpmon6">Chemistry</button></td>
+      <td><button id="cpmon8">Math</button></td>
+    </tr>
+    <tr>
+      <td>Tuesday</td>
+      <td><button id="cptue1">Math</button></td>
+      <td><button id="cptue2">English (Skills)</button></td>
+      <td><button id="cptue3">Geography</button></td>
+      <td><button id="cptue4">Guidance</button></td>
+      <td><button id="cptue6">Health Ed / PE</button></td>
+      <td><button id="cptue7">Thai</button></td>
+      <td><button id="cptue8">English (Core)</button></td>
+    </tr>
+    <tr>
+      <td>Wenzday</td>
+      <td colspan="2"><button id="cpwed1">Chemistry</button></td>
+      <td><button id="cpwed3">History</button></td>
+      <td><button id="cpwed4">English (Core)</button></td>
+      <td><button id="cpwed6">Math</button></td>
+      <td colspan="2"><button id="cpwed7">Physics</button></td>
+    </tr>
+    <tr>
+      <td>Thursday</td>
+      <td colspan="2"><button id="cpthu1">Technology</button></td>
+      <td><button id="cpthu3">Math</button></td>
+      <td><button id="cpthu4">Physics</button></td>
+      <td><button id="cpthu6">Biology</button></td>
+      <td colspan="2"><button id="cpthu7">Elective</button></td>
+    </tr>
+    <tr>
+      <td>Friday</td>
+      <td colspan="2"><button id="cpfri1">Astronomy</button></td>
+      <td><button id="cpfri3">Art / Dance</button></td>
+      <td><button id="cpfri4">Thai</button></td>
+      <td><button id="cpfri6">Math</button></td>
+      <td><button id="cpfri7">Geography</button></td>
+      <td><button id="cpfri8">English (Skills)</button></td>
+    </tr>
+  </table>
+  <br>
+  <div id="selbox" class="selbox">
+    Select Group For <span id="selboxsubjecttext"></span><br>
+    <button id="selboxg1"></button>
+    <button id="selboxg2"></button>
+  </div>
+  <link href="style.css" rel="stylesheet">
+  <script src="sketch.js"></script>
+</body>
+</html>
